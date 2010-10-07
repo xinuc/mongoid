@@ -6,6 +6,7 @@ require "mongoid/criterion/inclusion"
 require "mongoid/criterion/inspection"
 require "mongoid/criterion/optional"
 require "mongoid/criterion/selector"
+require "mongoid/criterion/eager_loading"
 
 module Mongoid #:nodoc:
 
@@ -30,6 +31,8 @@ module Mongoid #:nodoc:
     include Criterion::Inclusion
     include Criterion::Inspection
     include Criterion::Optional
+    include Criterion::EagerLoading
+    include Enumerable
 
     attr_accessor :collection, :documents, :embedded, :ids, :klass, :options, :selector
 
@@ -106,7 +109,16 @@ module Mongoid #:nodoc:
     #
     # <tt>criteria.each { |doc| p doc }</tt>
     def each(&block)
-      tap { context.iterate(&block) }
+      if @eager_loadings
+        # if eager loadings are used, preload the associations.
+        docs = []
+        context.iterate { |doc| docs << doc }
+        preload(docs)
+        docs.each(&block)
+      else
+        context.iterate(&block)
+      end
+      self
     end
 
     # Return true if the criteria has some Document or not
