@@ -548,6 +548,14 @@ describe Mongoid::Associations::EmbedsMany do
       @association[1].street.should == "Street 1"
     end
 
+    it "honors position" do
+      @association.size.should == 2
+      @association.nested_build(
+        "1" => { "id" => "street-2", :street => 'Changed Street' }
+      )
+      @association[1].street.should == 'Changed Street'
+    end
+
     it "should add multiple objects in the correct order" do
       @association.nested_build({
         "0" => { "id" => "street-2" },

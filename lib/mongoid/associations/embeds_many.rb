@@ -176,6 +176,7 @@ module Mongoid #:nodoc:
       def nested_build(attributes, options = {})
         @parent.instance_variable_set(:@building_nested, true)
         id_index, reordering = {}, false
+        each_with_index {|document, index| id_index[document.id.to_s] = index }
         attributes.each do |index, attrs|
           document = if attrs["id"].present?
             reordering = true
