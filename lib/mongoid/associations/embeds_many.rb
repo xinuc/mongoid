@@ -197,8 +197,9 @@ module Mongoid #:nodoc:
           else
             detect { |document| document._index == index.to_i }
           end
+
+          _destroy = Boolean.set(attrs.delete('_destroy'))
           if document
-            _destroy = Boolean.set(attrs.delete('_destroy'))
             if options && options[:allow_destroy] && _destroy
               @target.delete(document)
               document.destroy
