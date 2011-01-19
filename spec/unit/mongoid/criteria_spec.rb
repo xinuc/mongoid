@@ -571,24 +571,6 @@ describe Mongoid::Criteria do
         new_criteria.each.should == new_criteria
       end
     end
-
-    context "when caching" do
-
-      before do
-        Person.expects(:collection).returns(collection)
-        collection.expects(:find).with(
-          { :title => "Sir" },
-          { :cache => true }
-        ).returns(cursor)
-        cursor.expects(:each).yields(person)
-      end
-
-      it "caches the results of the cursor iteration" do
-        new_criteria.cache.each do |doc|
-          doc.should == person
-        end
-      end
-    end
   end
 
   describe "#initialize" do

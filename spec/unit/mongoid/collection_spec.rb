@@ -105,19 +105,6 @@ describe Mongoid::Collection do
         collection.directed(:enslave => true).should == slaves
       end
     end
-
-    context "when cached option is passed" do
-
-      let(:options) do
-        { :cache => true }
-      end
-
-      it "removed the cache option" do
-        collection.directed(options).should == master
-        options[:cache].should be_nil
-      end
-    end
-
   end
 
   describe "#find" do

@@ -385,64 +385,6 @@ describe Mongoid::Contexts::Mongo do
         end
       end
     end
-
-    context "when caching" do
-
-      let(:cached) do
-        criteria.cache
-      end
-
-      context "when executing once" do
-
-        let(:context) do
-          Mongoid::Contexts::Mongo.new(cached)
-        end
-
-        before do
-          context.expects(:execute).returns(cursor)
-        end
-
-        it "executes the criteria" do
-          context.iterate do |person|
-            person.should == person
-          end
-        end
-      end
-
-      context "when executing twice" do
-
-        let(:context) do
-          Mongoid::Contexts::Mongo.new(cached)
-        end
-
-        before do
-          context.expects(:execute).once.returns(cursor)
-        end
-
-        it "executes only once and it caches the result" do
-          2.times do
-            context.iterate do |person|
-              person.should == person
-            end
-          end
-        end
-      end
-
-      context "when there is no block" do
-
-        let(:context) do
-          Mongoid::Contexts::Mongo.new(cached)
-        end
-
-        before do
-          context.expects(:execute).once.returns(cursor)
-        end
-
-        it "executes the context" do
-          context.iterate
-        end
-      end
-    end
   end
 
   describe "#last" do

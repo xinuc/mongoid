@@ -5,7 +5,7 @@ class Game
   field :name
   referenced_in :person, :index => true
   accepts_nested_attributes_for :person
-  enslave and cache
+  enslave
 
   attr_protected :_id
 

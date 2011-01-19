@@ -66,6 +66,7 @@ module Mongoid #:nodoc
     #
     # <tt>cursor.next_document</tt>
     def next_document
+      # @todo: Durran: Stick the document in the identity map.
       Mongoid::Factory.build(@klass, @cursor.next_document)
     end
 

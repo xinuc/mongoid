@@ -56,42 +56,6 @@ describe Mongoid::Criterion::Optional do
     end
   end
 
-  describe "#cache" do
-
-    let(:criteria) do
-      base.cache
-    end
-
-    it "sets the cache option on the criteria" do
-      criteria.options[:cache].should be_true
-    end
-
-    it "returns a copy" do
-      base.cache.should_not eql(base)
-    end
-  end
-
-  describe "#cached?" do
-
-    context "when the criteria has a cache option" do
-
-      let(:criteria) do
-        base.cache
-      end
-
-      it "returns true" do
-        criteria.cached?.should be_true
-      end
-    end
-
-    context "when the criteria has no cache option" do
-
-      it "returns false" do
-        base.cached?.should be_false
-      end
-    end
-  end
-
   context "when chaining sort criteria" do
 
     let(:criteria) do

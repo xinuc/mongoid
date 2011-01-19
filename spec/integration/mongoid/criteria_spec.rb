@@ -6,30 +6,6 @@ describe Mongoid::Criteria do
     Person.delete_all
   end
 
-  context "when caching" do
-
-    before do
-      5.times do |n|
-        Person.create!(
-          :title => "Sir",
-          :age => (n * 10),
-          :aliases => ["D", "Durran"],
-          :ssn => "#{n}"
-        )
-      end
-    end
-
-    let(:criteria) do
-      Person.where(:title => "Sir").cache
-    end
-
-    it "iterates over the cursor only once" do
-      criteria.size.should == 5
-      Person.create!(:title => "Sir")
-      criteria.size.should == 5
-    end
-  end
-
   describe "#id" do
 
     context "when using object ids" do

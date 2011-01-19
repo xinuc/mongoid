@@ -19,6 +19,7 @@ module Mongoid #:nodoc
     include ActiveModel::Serializers::Xml
     include Mongoid::Atomicity
     include Mongoid::Attributes
+    include Mongoid::Caching
     include Mongoid::Collections
     include Mongoid::Copyable
     include Mongoid::Dirty

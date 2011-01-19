@@ -165,7 +165,6 @@ module Mongoid #:nodoc:
           @criteria = criteria.in(:_type => criteria.klass._types)
         end
         @criteria.enslave if klass.enslaved?
-        @criteria.cache if klass.cached?
       end
 
       # Iterate over each +Document+ in the results. This can take an optional
@@ -175,7 +174,6 @@ module Mongoid #:nodoc:
       #
       # <tt>context.iterate { |doc| p doc }</tt>
       def iterate(&block)
-        return caching(&block) if criteria.cached?
         if block_given?
           execute.each { |doc| yield doc }
         end
@@ -325,21 +323,6 @@ module Mongoid #:nodoc:
         )
       end
       alias :update :update_all
-
-      protected
-
-      # Iterate over each +Document+ in the results and cache the collection.
-      def caching(&block)
-        if defined? @collection
-          @collection.each(&block)
-        else
-          @collection = []
-          execute.each do |doc|
-            @collection << doc
-            yield doc if block_given?
-          end
-        end
-      end
     end
   end
 end

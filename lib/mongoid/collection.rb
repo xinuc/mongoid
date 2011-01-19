@@ -29,12 +29,10 @@ module Mongoid #:nodoc
     #
     # @param [ Hash ] options The operation options.
     #
-    # @option options [ true, false ] :cache Should the query cache in memory?
     # @option options [ true, false ] :enslave Send the write to the slave?
     #
     # @return [ Master, Slaves ] The connection to use.
     def directed(options = {})
-      options.delete(:cache)
       enslave = options.delete(:enslave) || @klass.enslaved?
       enslave ? master_or_slaves : master
     end

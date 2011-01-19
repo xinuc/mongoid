@@ -17,27 +17,6 @@ module Mongoid #:nodoc:
       end
       alias :asc :ascending
 
-      # Tells the criteria that the cursor that gets returned needs to be
-      # cached. This is so multiple iterations don't hit the database multiple
-      # times, however this is not advisable when working with large data sets
-      # as the entire results will get stored in memory.
-      #
-      # Example:
-      #
-      # <tt>criteria.cache</tt>
-      def cache
-        clone.tap { |crit| crit.options.merge!(:cache => true) }
-      end
-
-      # Will return true if the cache option has been set.
-      #
-      # Example:
-      #
-      # <tt>criteria.cached?</tt>
-      def cached?
-        options[:cache] == true
-      end
-
       # Adds fields to be sorted in descending order. Will add them in the order
       # they were passed into the method.
       #
