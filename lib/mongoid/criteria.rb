@@ -106,7 +106,18 @@ module Mongoid #:nodoc:
     #
     # <tt>criteria.each { |doc| p doc }</tt>
     def each(&block)
-      tap { context.iterate(&block) }
+      tap do
+        # @todo: Durran: Prep for merge with eager loading branch. If eager
+        #   loadings are set, execute the query to get all the associated
+        #   documents for each relation provided. Then for each of those, toss
+        #   them into the identity map with the appropriate criteria selectors as
+        #   their keys.
+        #
+        # @todo: Durran: Prep for identity map. Pass the criteria to #get on
+        #   the identity map for this criteria's class. If it exists we can
+        #   iterate that array of documents instead of going to the context.
+        context.iterate(&block)
+      end
     end
 
     # Return true if the criteria has some Document or not

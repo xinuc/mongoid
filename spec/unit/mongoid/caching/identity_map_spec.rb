@@ -6,16 +6,20 @@ describe Mongoid::Caching::IdentityMap do
     Person.new
   end
 
+  let(:criteria) do
+    Game.where(:person_id => person.id)
+  end
+
   describe "#get" do
 
     let(:map) do
-      described_class.new({ person.id => person })
+      described_class.new({ criteria.selector => [ person ] })
     end
 
     context "when the document is found" do
 
       it "returns the document" do
-        map.get(person.id).should == person
+        map.get(criteria).should == [ person ]
       end
     end
 
@@ -34,15 +38,16 @@ describe Mongoid::Caching::IdentityMap do
     end
 
     before do
-      map.set(person)
+      criteria.expects(:entries).returns([ person ])
+      map.set(criteria)
     end
 
     it "sets the key as the document id" do
-      map.should have_key(person.id)
+      map.should have_key(criteria.selector)
     end
 
     it "sets the value as the document" do
-      map.values.first.should == person
+      map.values.first.should == [ person ]
     end
   end
 end

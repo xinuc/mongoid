@@ -22,15 +22,19 @@ describe Mongoid::Caching do
           Post.new
         end
 
+        let(:criteria) do
+          Post.where(:person_id => BSON::ObjectId.new)
+        end
+
         before do
-          Person.cache! do |klass|
-            klass.cache.set(post_one)
-            klass.cache.set(post_two)
+          criteria.expects(:entries).returns([ post_one, post_two ])
+          Post.cache! do |klass|
+            klass.cache.set(criteria)
           end
         end
 
         it "expires the cache after the block" do
-          Person.cache.should be_empty
+          Post.cache.should be_empty
         end
       end
     end
@@ -47,22 +51,22 @@ describe Mongoid::Caching do
           Post.new
         end
 
+        let(:criteria) do
+          Post.where(:person_id => BSON::ObjectId.new)
+        end
+
         before do
-          Person.cache!
-          Person.cache.set(post_one)
-          Person.cache.set(post_two)
+          criteria.expects(:entries).returns([ post_one, post_two ])
+          Post.cache!
+          Post.cache.set(criteria)
         end
 
         after do
-          Person.expire_cache!
+          Post.expire_cache!
         end
 
-        it "sets the first document in the map" do
-          Person.cache.get(post_one.id).should == post_one
-        end
-
-        it "sets the second document in the map" do
-          Person.cache.get(post_two.id).should == post_two
+        it "sets the documents in the map" do
+          Post.cache.get(criteria).should == [ post_one, post_two ]
         end
       end
     end

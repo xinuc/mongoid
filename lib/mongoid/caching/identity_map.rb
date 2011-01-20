@@ -15,7 +15,7 @@ module Mongoid #:nodoc:
       #
       # @return [ IdentityMap ] The new map.
       #
-      # @since 2.0.0.rc.6
+      # @since 2.0.0.rc.7
       def initialize(attributes = {})
         merge!(attributes)
       end
@@ -23,15 +23,15 @@ module Mongoid #:nodoc:
       # Set a document in the identity map. The id will become the key.
       #
       # @example Set a document in the map.
-      #   map.set(person)
+      #   map.set(criteria, people)
       #
-      # @param [ Document ] document The document to cache.
+      # @param [ Criteria ] criteria The criteria to cache.
       #
-      # @return [ Document ] The document that was set.
+      # @return [ Array<Document> ] The cached document(s).
       #
-      # @since 2.0.0.rc.6
-      def set(document)
-        self[document.id] = document
+      # @since 2.0.0.rc.7
+      def set(criteria)
+        self[criteria.selector] = criteria.entries
       end
 
       # Retrieve a document from the map. If the key does not exist, return
@@ -40,13 +40,14 @@ module Mongoid #:nodoc:
       # @example Get the document from the map.
       #   map.get(person.id)
       #
-      # @param [ BSON::ObjectId, String, Object ] id The document's id.
+      # @param [ Criteria ] criteria The criteria to get the cached docs for.
       #
-      # @return [ Document, nil ] The document if found or nil.
+      # @return [ Array<Document>, nil ] The document(s) if found or nil.
       #
-      # @since 2.0.0.rc.6
-      def get(id)
-        self[id]
+      # @since 2.0.0.rc.7
+      def get(criteria)
+        return nil unless criteria.is_a?(Mongoid::Criteria)
+        self[criteria.selector]
       end
     end
   end
